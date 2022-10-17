@@ -1,14 +1,15 @@
-import React, { Component, MouseEvent } from 'react';
+import React, { Component } from 'react';
 import Web3 from 'web3';
-import { Contract,  providers, utils, Wallet } from "ethers";
+//import { Contract,  providers, utils, Wallet } from "ethers";
 import EthSwap from '../abis/contracts/EthSwap.sol/EthSwap.json';
 import AirDrop from '../abis/contracts/MyAirDropToken.sol/MyAirDropToken.json';
+import MyAlertDismissible from './MyAlertDismissible';
+import Button from 'react-bootstrap/Button';
 
 const ethers = require("ethers");
-//const ethers = require('hardhat');
+
 const { MerkleTree } = require('merkletreejs');
 const keccak256 = require('keccak256');
-
 
 class Main extends Component {
   
@@ -25,7 +26,8 @@ class Main extends Component {
           signer: null,
           rootHash: '',
           myAirDrop: '',
-          myMerkleTree: ''
+          myMerkleTree: '',
+          formatElAddr: ''
       }
   }
 
@@ -45,7 +47,7 @@ class Main extends Component {
       await this.loadWeb3();
 //      console.log(window.web3);
       const result = await this.loadBlockchainData();
-//      if(result)
+      if(result)
           this.setState({loading: false})
   }
 
@@ -54,7 +56,7 @@ class Main extends Component {
       console.log(accounts);
       console.log(accounts[0]);
       this.setState({ account: accounts[0] })
-      console.log(this.state.account);
+      console.log("Account: ",this.state.account);
 
       const ethBalance = await window.web3.eth.getBalance(accounts[0])
       this.setState( { ethBalance: ethBalance })
@@ -96,6 +98,8 @@ class Main extends Component {
       this.setState({rootHash: this.newRoot});
       this.setState({myMerkleTree: this.merkleTree});
       this.setState({myEthSwap: myEthSwap});
+      const formatting = addrs.map((_element) => <li key={_element}>{_element}</li>);
+      this.setState({formatElAddr: formatting});
   }
 
   async setNewRootHash() {
@@ -120,7 +124,6 @@ class Main extends Component {
   async checkEligibilityAndClaim() {
       window.Buffer = window.Buffer || require("buffer").Buffer;
       const myAddress = await this.state.signer.getAddress();
-      alert(myAddress);
       const proof = this.state.myMerkleTree.getHexProof(keccak256(myAddress.toString()));
       const airDrop = this.state.myAirDrop;
       if (proof.length !== 0) {
@@ -140,38 +143,32 @@ class Main extends Component {
   }
 
 
-//  function handleSetNewHash(event: MouseEvent<HTMLButtonElement>): void {
-//    event.preventDefault();
-
-
 
   render() {
 
 
       return (
-      <div id="content" className="mt-3">
+      <div id="content" className="mt-3" style={{backgroundColor: "lightskyblue"}}>
 
-       <div className="d-flex justify-content-between mb-3">
-       </div>
-       <div className="card mb-4" >
-       </div>
         <div className="card-body"> 
-            Main content! {this.state.ethBalance} <br/> 
-            Eligible Addresses: {this.state.eligibleAddr} <br/>
-            New Root hash: {this.state.rootHash}
+             <MyAlertDismissible 
+                  formatElAddr={this.state.formatElAddr}  
+              /><br/>
         </div>
-
+        <br/>
         <div>
-            <button className='button' onClick={this.handleSetNewHash} >
-                 Set New Root Hash! Begin new Season of Air Drop!
-            </button>
-        </div>
+            <Button className="btn btn-block btn-outline-warning" onClick={this.handleSetNewHash}>
+                 Distribute Air Drop! First, Set New Root Hash! Begin new Season of Air Drop!
+            </Button>
+        </div><br/>
         <div>
-            <button className='button' onClick={this.handleCheckAndClaim}>
-                 Now Check your Eligibility and Claim your REWARDS!
-            </button>
-        </div>
 
+            <Button className="btn btn-block btn-outline-warning" onClick={this.handleCheckAndClaim}>
+                 Claim! Now Check your Eligibility and Claim your REWARDS!
+            </Button>
+ 
+        </div>
+        <br/>
       </div>
 
       );

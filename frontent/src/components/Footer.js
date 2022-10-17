@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import MyAlertFooter from './MyAlertFooter';
 
 
 class Footer extends Component {
@@ -10,19 +10,10 @@ class Footer extends Component {
 
 
       return (
-      <div id="content" className="mt-3">
-
-       <div className="d-flex justify-content-between mb-3">
-       </div>
-       <div className="card mb-4" >
-       </div>
         <div className="card-body"> 
-            Footer content!
-        </div>
+          <MyAlertFooter/>
+       </div>
 
-
-
-      </div>
 
       );
   }

@@ -67,7 +67,8 @@ class Main extends Component {
   }
 
  async loadEthContracts() {
-      const ETH_SWAP_ADDR="0x5050a99908D274d877576c774FF8C605D2488F3F";
+      //const ETH_SWAP_ADDR="0x5050a99908D274d877576c774FF8C605D2488F3F";
+      const ETH_SWAP_ADDR="0xaA537eE86a4AA92C0f7B4b81755696eE9c59dcaB"; //Goerli network
 
       const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
       await provider.send("eth_requestAccounts", []);
@@ -103,7 +104,9 @@ class Main extends Component {
   }
 
   async setNewRootHash() {
-      const AIR_DROP_ADDR="0xF652b6F5A1eDb2c6c05F6Ffc0c870E7c98d87feb";
+      //const AIR_DROP_ADDR="0xF652b6F5A1eDb2c6c05F6Ffc0c870E7c98d87feb";
+      const AIR_DROP_ADDR="0x951e5c1aF7F20a96F436646dD077Ee7B9fFc53Ff";
+
       const signer = this.state.signer;
       const AirDropFactory = new ethers.Contract(AIR_DROP_ADDR, AirDrop.abi, signer);
       const myAirDrop = AirDropFactory.attach(AIR_DROP_ADDR);
